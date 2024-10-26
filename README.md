@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Name | Security Analyst</title>
+  <title>Ryan Shi Ding | Security Analyst</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <!-- Header Section -->
   <header>
-    <h1>Your Name</h1>
+    <h1>Ryan Shi Ding</h1>
     <p>Security Analyst | SOC Enthusiast | Cybersecurity Projects</p>
   </header>
 
