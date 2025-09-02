@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ryan Shi Ding - Portfolio</title>
+  <style>
+    /* Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #0d1117;
+      color: #c9d1d9;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    /* Header Styles */
+    header {
+      background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+      padding: 60px 20px;
+      text-align: center;
+      border-bottom: 1px solid #21262d;
+    }
+    
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      color: #58a6ff;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    header p {
+      font-size: 1.2rem;
+      color: #8b949e;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    /* Section Styles */
+    section {
+      padding: 60px 20px;
+      border-bottom: 1px solid #21262d;
+    }
+    
+    section:last-of-type {
+      border-bottom: none;
+    }
+    
+    h2 {
+      font-size: 2.2rem;
+      margin-bottom: 30px;
+      color: #58a6ff;
+      text-align: center;
+      position: relative;
+    }
+    
+    h2:after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background: #58a6ff;
+      margin: 10px auto;
+      border-radius: 3px;
+    }
+    
+    /* About Section */
+    #about p {
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+      text-align: center;
+      line-height: 1.8;
+    }
+    
+    /* Projects Section */
+    .project {
+      background: #161b22;
+      border-radius: 8px;
+      padding: 25px;
+      margin-bottom: 25px;
+      border: 1px solid #21262d;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .project:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .project h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: #58a6ff;
+    }
+    
+    .project p {
+      margin-bottom: 15px;
+      color: #8b949e;
+    }
+    
+    .project a {
+      display: inline-block;
+      background: #238636;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+    
+    .project a:hover {
+      background: #2ea043;
+    }
+    
+    /* Skills Section */
+    #skills ul {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      list-style: none;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    #skills li {
+      background: #161b22;
+      border: 1px solid #30363d;
+      padding: 12px 25px;
+      border-radius: 30px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    #skills li:hover {
+      background: #58a6ff;
+      color: #0d1117;
+      transform: translateY(-3px);
+    }
+    
+    /* Contact Section */
+    #contact p {
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+    
+    #contact a {
+      color: #58a6ff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    #contact a:hover {
+      color: #79c0ff;
+      text-decoration: underline;
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      background: #161b22;
+      border-top: 1px solid #21262d;
+      color: #8b949e;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2.2rem;
+      }
+      
+      h2 {
+        font-size: 1.8rem;
+      }
+      
+      #skills ul {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      #skills li {
+        width: 80%;
+        text-align: center;
+      }
+    }
+    
+    /* Troubleshooting Section */
+    .troubleshooting {
+      background: #1a202c;
+      border-radius: 8px;
+      padding: 25px;
+      margin-top: 40px;
+      border-left: 4px solid #ff7b72;
+    }
+    
+    .troubleshooting h3 {
+      color: #ff7b72;
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+    }
+    
+    .troubleshooting ol {
+      margin-left: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .troubleshooting li {
+      margin-bottom: 10px;
+    }
+    
+    .troubleshooting code {
+      background: #2d3748;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Section -->
+  <header>
+    <div class="container">
+      <h1>Ryan Shi Ding</h1>
+      <p>IT Enthusiast | Projects | Cyber Security Student</p>
+    </div>
+  </header>
+
+  <!-- About Section -->
+  <section id="about">
+    <div class="container">
+      <h2>About Me</h2>
+      <p>Hello, my name is Ryan, and I am a second-year student at Linnaeus University, specializing in Computer Science with a focus on Cyber Security. I have a strong interest in IT and am passionate about exploring emerging technologies, particularly in the realm of network security, threat detection, and incident response. In addition to my academic pursuits, I engage in personal projects related to cybersecurity to enhance my practical skills. My short-term goals include deepening my knowledge of cybersecurity concepts and gaining practical experience through internships, while my long-term aspiration is to become a skilled security analyst and contribute to protecting organizations against cyber threats. This website showcases my projects and skills.</p>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects">
+    <div class="container">
+      <h2>Projects</h2>
+      <div class="project">
+        <h3>Yatzy Project</h3>
+        <p>Yatzy is a classic dice game of strategy and luck, where players roll five dice over 13 rounds to score points in combinations like "Full House" or "Yatzy" (five of a kind). I've coded the game in Python, bringing its mechanics to life programmatically.</p>
+        <a href="https://github.com/rayuhnd/Yatzy">View on GitHub</a>
+      </div>
+      <!-- Add more projects as needed -->
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills">
+    <div class="container">
+      <h2>Skills</h2>
+      <ul>
+        <li>Python and Scripting for Automation</li>
+        <li>Web Application Security Testing with ffuf</li>
+        <li>Phishing Simulation and Awareness Training with GoPhish</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="container">
+      <h2>Contact Me</h2>
+      <p>Email: ryan.shiding@gmail.com</p>
+      <p>LinkedIn: <a href="https://www.linkedin.com/in/ryan-shi-ding-407497186">LinkedIn Profile</a></p>
+    </div>
+  </section>
+
+  <!-- Troubleshooting Guide -->
+  <section id="troubleshooting">
+    <div class="container">
+      <div class="troubleshooting">
+        <h3>Website Not Updating? Try These Steps:</h3>
+        <ol>
+          <li><strong>Hard Refresh:</strong> Press Ctrl+F5 (Windows) or Cmd+Shift+R (Mac) to bypass cache</li>
+          <li><strong>Clear Browser Cache:</strong> Go to browser settings and clear cached images and files</li>
+          <li><strong>Check File Path:</strong> Ensure your HTML file is in the correct directory</li>
+          <li><strong>Local Testing:</strong> Open the HTML file directly in your browser (double-click the file)</li>
+          <li><strong>Server Restart:</strong> If using a local server, restart it after making changes</li>
+          <li><strong>GitHub Pages:</strong> If deployed on GitHub, check the Actions tab for build errors</li>
+        </ol>
+        <p>If you're using GitHub Pages, remember that changes may take 1-10 minutes to appear after pushing.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2023 Ryan Shi Ding. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
