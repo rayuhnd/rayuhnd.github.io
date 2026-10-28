@@ -17,7 +17,7 @@ function run(el){
 }
 if(!reduce&&'IntersectionObserver' in window){
  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){io.unobserve(e.target);run(e.target)}})},{threshold:.2});
- document.querySelectorAll('h1,h2,h4,h3,.sub,.eyebrow,.yr,.tag,.org,.group,.card p,.hero p,.item li,#about p,.btn,.chips span,.links a').forEach(function(el){
+ document.querySelectorAll('h1,h2,h3,h4').forEach(function(el){
   if(el.children.length||!el.textContent.trim())return;
   el.dataset.txt=el.textContent;el.textContent=scramble(el.dataset.txt,0);io.observe(el);
  });
