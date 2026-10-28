@@ -30,6 +30,7 @@ canvas.className='matrix-rain';canvas.setAttribute('aria-hidden','true');
 document.body.insertBefore(canvas,document.body.firstChild);
 var width=0,height=0,ratio=1,streams=[],lastFrame=0,accent='';
 var cell=14,center=520;
+var matrixChars='!"#¤%&/()=?^*@£$€{[]}asdfghjklöäqwertyuiopåzxcvbnm0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 function resize(){
  width=window.innerWidth;height=window.innerHeight;ratio=Math.min(window.devicePixelRatio||1,2);
  canvas.width=width*ratio;canvas.height=height*ratio;ctx.setTransform(ratio,0,0,ratio,0,0);
@@ -49,7 +50,7 @@ function render(delta){
   for(var i=0;i<stream.length;i++){
    var y=stream.y-i*cell;
    if(y<0||y>height)continue;
-   if(!stream.chars[i]||Math.random()<.025)stream.chars[i]='!"#¤%&/()=?^*@£$€{[]}asdfghjklöäqwertyuiopåzxcvbnm0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'[Math.floor(Math.random()*36)];
+   if(!stream.chars[i]||Math.random()<.025)stream.chars[i]=matrixChars[Math.floor(Math.random()*matrixChars.length)];
    ctx.globalAlpha=i===0?.85:.06+.3*(1-i/stream.length);
    ctx.fillStyle=accent;ctx.fillText(stream.chars[i],stream.x,y);
   }
