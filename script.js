@@ -49,7 +49,7 @@ function render(delta){
   for(var i=0;i<stream.length;i++){
    var y=stream.y-i*cell;
    if(y<0||y>height)continue;
-   if(!stream.chars[i]||Math.random()<.025)stream.chars[i]='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'[Math.floor(Math.random()*36)];
+   if(!stream.chars[i]||Math.random()<.025)stream.chars[i]='!"#¤%&/()=?^*@£$€{[]}asdfghjklöäqwertyuiopåzxcvbnm0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'[Math.floor(Math.random()*36)];
    ctx.globalAlpha=i===0?.85:.06+.3*(1-i/stream.length);
    ctx.fillStyle=accent;ctx.fillText(stream.chars[i],stream.x,y);
   }
