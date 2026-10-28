@@ -21,3 +21,52 @@ if(!reduce&&'IntersectionObserver' in window){
 }
 })();
 document.querySelectorAll('[data-go]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();var t=document.getElementById(a.dataset.go);if(t)t.scrollIntoView({behavior:'smooth'})}));
+(function(){
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(window.innerWidth<=1099)return;
+var canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
+if(!ctx)return;
+canvas.className='matrix-rain';canvas.setAttribute('aria-hidden','true');
+document.body.insertBefore(canvas,document.body.firstChild);
+var width=0,height=0,ratio=1,streams=[],lastFrame=0,accent='';
+var cell=14,center=520;
+function resize(){
+ width=window.innerWidth;height=window.innerHeight;ratio=Math.min(window.devicePixelRatio||1,2);
+ canvas.width=width*ratio;canvas.height=height*ratio;ctx.setTransform(ratio,0,0,ratio,0,0);
+ accent=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#3ddbb8';
+ streams=[];
+ var leftEnd=Math.max(0,width/2-center),rightStart=Math.min(width,width/2+center);
+ function addSide(start,end){
+  for(var x=start+12;x<end-8;x+=18)streams.push({x:x,y:Math.random()*height,speed:30+Math.random()*65,length:8+Math.floor(Math.random()*14),chars:[]});
+ }
+ addSide(0,leftEnd);addSide(rightStart,width);
+ render(0);
+}
+function render(delta){
+ ctx.clearRect(0,0,width,height);ctx.font='12px Consolas, "Courier New", monospace';ctx.textAlign='center';
+ streams.forEach(function(stream){
+  if(!reduce)stream.y=(stream.y+stream.speed*delta/1000)%(height+stream.length*cell);
+  for(var i=0;i<stream.length;i++){
+   var y=stream.y-i*cell;
+   if(y<0||y>height)continue;
+   if(!stream.chars[i]||Math.random()<.025)stream.chars[i]='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'[Math.floor(Math.random()*36)];
+   ctx.globalAlpha=i===0?.85:.06+.3*(1-i/stream.length);
+   ctx.fillStyle=accent;ctx.fillText(stream.chars[i],stream.x,y);
+  }
+ });
+ ctx.globalAlpha=1;
+}
+var frame;
+function animate(now){
+ if(document.hidden)return;
+ if(now-lastFrame>=45){render(now-lastFrame);lastFrame=now}
+ frame=requestAnimationFrame(animate);
+}
+window.addEventListener('resize',resize);
+document.addEventListener('visibilitychange',function(){
+ if(document.hidden){cancelAnimationFrame(frame)}
+ else if(!reduce){lastFrame=performance.now();frame=requestAnimationFrame(animate)}
+});
+resize();
+if(!reduce)frame=requestAnimationFrame(animate);
+})();
