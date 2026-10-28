@@ -4,7 +4,7 @@ var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').mat
 var rnd=function(){return CH[Math.floor(Math.random()*CH.length)]};
 var scramble=function(s,n){var o='';for(var i=0;i<s.length;i++){o+=(i<n||/\s/.test(s[i]))?s[i]:rnd()}return o};
 function run(el){
- var txt=el.dataset.txt,len=txt.length,dur=Math.min(500+len*14,1800),t0=performance.now();
+ var txt=el.dataset.txt,len=txt.length,dur=Math.min(1000+len*28,3600),t0=performance.now();
  el.style.minHeight=el.offsetHeight+'px';el.classList.add('scr');
  (function tick(now){
   var p=Math.min((now-t0)/dur,1),n=Math.floor(p*len);
