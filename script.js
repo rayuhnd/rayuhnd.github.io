@@ -31,6 +31,14 @@ document.body.insertBefore(canvas,document.body.firstChild);
 var width=0,height=0,ratio=1,streams=[],lastFrame=0,accent='';
 var cell=14,center=520;
 var matrixChars='!"#¤%&/()=?^*@£$€{[]}asdfghjklöäqwertyuiopåzxcvbnm0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var japaneseChars='あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんアイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+function randomMatrixChar(){
+ if(Math.random()<.5)return matrixChars[Math.floor(Math.random()*matrixChars.length)];
+ var group=Math.floor(Math.random()*3);
+ if(group===0)return japaneseChars[Math.floor(Math.random()*japaneseChars.length)];
+ var code=group===1?0x3041+Math.floor(Math.random()*0x56):0x4e00+Math.floor(Math.random()*0x5200);
+ return String.fromCharCode(code);
+}
 function resize(){
  width=window.innerWidth;height=window.innerHeight;ratio=Math.min(window.devicePixelRatio||1,2);
  canvas.width=width*ratio;canvas.height=height*ratio;ctx.setTransform(ratio,0,0,ratio,0,0);
@@ -50,7 +58,7 @@ function render(delta){
   for(var i=0;i<stream.length;i++){
    var y=stream.y-i*cell;
    if(y<0||y>height)continue;
-   if(!stream.chars[i]||Math.random()<.025)stream.chars[i]=matrixChars[Math.floor(Math.random()*matrixChars.length)];
+   if(!stream.chars[i]||Math.random()<.025)stream.chars[i]=randomMatrixChar();
    ctx.globalAlpha=i===0?.85:.06+.3*(1-i/stream.length);
    ctx.fillStyle=accent;ctx.fillText(stream.chars[i],stream.x,y);
   }
