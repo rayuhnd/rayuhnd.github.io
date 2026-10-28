@@ -1,601 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MasterChef Australia Cookbook</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Georgia', serif;
-            line-height: 1.6;
-            color: #4a4a4a;
-            background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 50%, #ffd4eb 100%);
-            min-height: 100vh;
-        }
-
-        .cookbook {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            box-shadow: 0 10px 50px rgba(255, 105, 180, 0.3);
-        }
-
-        .cover {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fda085 100%);
-            color: white;
-            padding: 100px 40px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cover::before {
-            content: "🌸";
-            position: absolute;
-            font-size: 100px;
-            opacity: 0.1;
-            top: 20px;
-            left: 50px;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .cover::after {
-            content: "✨";
-            position: absolute;
-            font-size: 80px;
-            opacity: 0.15;
-            bottom: 30px;
-            right: 60px;
-            animation: float 5s ease-in-out infinite reverse;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
-        }
-
-        .cover h1 {
-            font-size: 3.5em;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 8px rgba(255, 105, 180, 0.4);
-            font-family: 'Brush Script MT', cursive;
-        }
-
-        .cover p {
-            font-size: 1.4em;
-            font-style: italic;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .cover .subtitle {
-            margin-top: 30px;
-            font-size: 1.1em;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 15px 30px;
-            border-radius: 30px;
-            display: inline-block;
-        }
-
-        .toc {
-            padding: 50px 40px;
-            background: linear-gradient(to bottom, #fff5f9, #ffffff);
-            border-bottom: 4px solid #ff9a9e;
-        }
-
-        .toc h2 {
-            color: #ff69b4;
-            margin-bottom: 40px;
-            font-size: 2.5em;
-            text-align: center;
-            position: relative;
-            padding-bottom: 20px;
-        }
-
-        .toc h2::after {
-            content: "💕";
-            position: absolute;
-            left: 50%;
-            bottom: -10px;
-            transform: translateX(-50%);
-            font-size: 30px;
-        }
-
-        .toc-section {
-            margin-bottom: 35px;
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.1);
-        }
-
-        .toc-section h3 {
-            color: #ff69b4;
-            margin-bottom: 15px;
-            font-size: 1.6em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .toc-section h3::before {
-            content: "🌺";
-            font-size: 1.2em;
-        }
-
-        .toc-item {
-            padding: 12px 20px;
-            margin: 8px 0;
-            background: linear-gradient(135deg, #fff0f5 0%, #ffe4f1 100%);
-            border-left: 5px solid #ff9a9e;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1.05em;
-        }
-
-        .toc-item:hover {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-            color: white;
-            transform: translateX(10px) scale(1.02);
-            box-shadow: 0 5px 20px rgba(255, 105, 180, 0.3);
-        }
-
-        .content {
-            padding: 50px 40px;
-            background: linear-gradient(to bottom, #ffffff, #fff5f9);
-        }
-
-        .recipe {
-            display: none;
-            animation: fadeIn 0.6s;
-        }
-
-        .recipe.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { 
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .recipe-header {
-            border-bottom: 4px solid #ff9a9e;
-            padding-bottom: 25px;
-            margin-bottom: 40px;
-            background: linear-gradient(135deg, #fff0f5 0%, #ffe4f1 100%);
-            padding: 30px;
-            border-radius: 15px;
-            position: relative;
-        }
-
-        .recipe-header::before {
-            content: "👨‍🍳";
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            font-size: 50px;
-            opacity: 0.3;
-        }
-
-        .recipe-header h2 {
-            color: #ff69b4;
-            font-size: 2.8em;
-            margin-bottom: 15px;
-            font-family: 'Brush Script MT', cursive;
-        }
-
-        .recipe-meta {
-            color: #ff1493;
-            font-style: italic;
-            font-size: 1.2em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .recipe-meta::before {
-            content: "✨";
-        }
-
-        .section {
-            margin-bottom: 45px;
-        }
-
-        .section h3 {
-            color: #ff1493;
-            font-size: 2em;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #ffc0cb;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .ingredients-section h3::before {
-            content: "🥘";
-        }
-
-        .steps-section h3::before {
-            content: "📝";
-        }
-
-        .ingredients-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-bottom: 35px;
-        }
-
-        .ingredient-group {
-            background: linear-gradient(135deg, #fff0f5 0%, #ffe4f1 100%);
-            padding: 25px;
-            border-radius: 12px;
-            border: 3px solid #ffc0cb;
-            transition: transform 0.3s;
-        }
-
-        .ingredient-group:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.2);
-        }
-
-        .ingredient-group h4 {
-            color: #ff1493;
-            margin-bottom: 18px;
-            font-size: 1.3em;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .ingredient-group h4::before {
-            content: "💗";
-        }
-
-        .ingredient-group ul {
-            list-style: none;
-        }
-
-        .ingredient-group li {
-            padding: 8px 0;
-            padding-left: 25px;
-            position: relative;
-            line-height: 1.6;
-        }
-
-        .ingredient-group li:before {
-            content: "🌸";
-            position: absolute;
-            left: 0;
-            font-size: 12px;
-        }
-
-        .steps {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(255, 105, 180, 0.1);
-        }
-
-        .steps ol {
-            counter-reset: step-counter;
-            list-style: none;
-        }
-
-        .steps li {
-            counter-increment: step-counter;
-            padding: 25px;
-            padding-left: 75px;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #fff0f5 0%, #ffffff 100%);
-            border-radius: 12px;
-            position: relative;
-            border-left: 5px solid #ff9a9e;
-            transition: all 0.3s;
-        }
-
-        .steps li:hover {
-            background: linear-gradient(135deg, #ffe4f1 0%, #fff0f5 100%);
-            transform: translateX(5px);
-        }
-
-        .steps li:before {
-            content: counter(step-counter);
-            position: absolute;
-            left: 20px;
-            top: 25px;
-            background: linear-gradient(135deg, #ff9a9e 0%, #ff69b4 100%);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2em;
-            box-shadow: 0 4px 10px rgba(255, 105, 180, 0.3);
-        }
-
-        .back-btn {
-            background: linear-gradient(135deg, #ff9a9e 0%, #ff69b4 100%);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 1.1em;
-            margin-bottom: 35px;
-            transition: all 0.3s;
-            box-shadow: 0 5px 20px rgba(255, 105, 180, 0.3);
-            font-weight: bold;
-        }
-
-        .back-btn:hover {
-            transform: scale(1.08) translateY(-2px);
-            box-shadow: 0 8px 30px rgba(255, 105, 180, 0.5);
-        }
-
-        .back-btn::before {
-            content: "← ";
-        }
-
-        @media print {
-            .back-btn, .toc { display: none; }
-            .recipe { display: block !important; page-break-after: always; }
-            body { background: white; }
-        }
-
-        @media (max-width: 768px) {
-            .cover h1 { font-size: 2.5em; }
-            .recipe-header h2 { font-size: 2em; }
-            .ingredients-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="description" content="Portfolio of Ryan Shi Ding, cyber security student at Linnaeus University.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+<title>Ryan Shi Ding – Cyber Security Student</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="cookbook">
-        <div class="cover">
-            <h1>MasterChef Australia</h1>
-            <p>A Delightful Collection of Recipes</p>
-            <div class="subtitle">Featuring Back To Win & More ✨</div>
-        </div>
+<nav><div class="nav"><a class="logo" href="#top" data-go="top">Ryan<span>.</span>Shi Ding</a>
+<div class="links"><a href="#about" data-go="about">About</a><a href="#portfolio" data-go="portfolio">Portfolio</a><a href="#services" data-go="services">Services</a><a href="#skills" data-go="skills">Skills</a><a href="#experience" data-go="experience">Experience</a><a href="#contact" data-go="contact">Contact</a></div></div></nav>
 
-        <div class="toc" id="toc">
-            <h2>Table of Contents</h2>
-            
-            <div class="toc-section">
-                <h3>Savory Delights</h3>
-                <div class="toc-item" onclick="showRecipe('butter-chicken')">Depinder's Butter Chicken</div>
-                <div class="toc-item" onclick="showRecipe('prawn-takoyaki')">Audra's Indian Spiced Prawn Takoyaki</div>
-                <div class="toc-item" onclick="showRecipe('slosh-smash')">Sav's Slosh and Smash</div>
-                <div class="toc-item" onclick="showRecipe('banana-fish')">Depinder's Banana Leaf Fish Fry</div>
-                <div class="toc-item" onclick="showRecipe('leek-fritters')">Theo's Burnt Leek & Squid Fritters</div>
-                <div class="toc-item" onclick="showRecipe('ajo-blanco')">Andre's Ajo Blanco</div>
-                <div class="toc-item" onclick="showRecipe('arroz-caldoso')">Jamie's Arroz Caldoso</div>
-                <div class="toc-item" onclick="showRecipe('maccaruna')">Laura's Maccaruna with Rabbit Ragu</div>
-                <div class="toc-item" onclick="showRecipe('moules-frites')">Callum's Moules Frites</div>
-                <div class="toc-item" onclick="showRecipe('mushroom-tart')">Callum's Mushroom Tart</div>
-                <div class="toc-item" onclick="showRecipe('charred-chicken')">Jamie's Charred Chicken</div>
-                <div class="toc-item" onclick="showRecipe('potato-samphire')">Laura's Potato & Samphire</div>
-            </div>
+<section class="hero" id="top">
+<div class="eyebrow">Hi, my name is</div>
+<h1>Ryan Shi Ding</h1>
+<p>Cyber security student at Linnaeus University with hands-on experience in web application testing, phishing simulation, network infrastructure and technical support. Based in Växjö, Sweden.</p>
+<a class="btn" href="#contact" data-go="contact">Get in touch</a><a class="btn o" href="https://www.linkedin.com/in/ryan-shi-ding/" target="_blank" rel="noopener">LinkedIn</a>
+</section>
 
-            <div class="toc-section">
-                <h3>Sweet Treats</h3>
-                <div class="toc-item" onclick="showRecipe('carrot-halwa')">Navy Team's Carrot Halwa Parfait</div>
-                <div class="toc-item" onclick="showRecipe('loukoumades')">Theo's Loukoumades</div>
-                <div class="toc-item" onclick="showRecipe('paris-brest')">Blue Team's Hazelnut Paris Brest</div>
-                <div class="toc-item" onclick="showRecipe('gin-rhubarb')">Callum's Gin & Rhubarb Dessert</div>
-                <div class="toc-item" onclick="showRecipe('amaretto')">Laura's Amaretto Affogato</div>
-                <div class="toc-item" onclick="showRecipe('pine-nut')">Jamie's Pine Nut Negroni</div>
-                <div class="toc-item" onclick="showRecipe('thai-curry-ice')">Depinder's Thai Curry Ice Cream</div>
-                <div class="toc-item" onclick="showRecipe('blood-orange')">Callum's Blood Orange Parfait</div>
-                <div class="toc-item" onclick="showRecipe('botanical')">Miko's Botanical Garden</div>
-            </div>
-        </div>
+<section id="about">
+<h2>About</h2><p class="sub">Security-minded, practical and curious</p>
+<p>I’m studying for a BSc in Computer Science with a specialization in Cyber Security (2024–2027) at Linnaeus University. Alongside my studies I’ve worked as an information security intern, a network infrastructure technician and a technical support specialist, so I’ve seen security from the testing side as well as the day-to-day IT side.</p>
+<p>Before moving into IT I worked in healthcare administration and as a correctional officer, which taught me to stay calm under pressure and communicate clearly. I speak Swedish and Mandarin natively, English at a bilingual level, and some French.</p>
+</section>
 
-        <div class="content" id="content"></div>
-    </div>
+<section id="portfolio">
+<h2>Portfolio</h2><p class="sub">Tools I use in practice</p>
+<div class="grid">
+<div class="card"><span class="tag">Web security</span><h3>ffuf</h3><p>Directory and endpoint fuzzing for web application reconnaissance and vulnerability discovery.</p></div>
+<div class="card"><span class="tag">Awareness</span><h3>GoPhish</h3><p>Simulated phishing campaigns to assess employee security awareness and improve resilience.</p></div>
+<div class="card"><span class="tag">Networking</span><h3>Wireshark</h3><p>Packet capture and traffic analysis for network and security investigations.</p></div>
+<div class="card"><span class="tag">Infrastructure</span><h3>Cisco Catalyst Center</h3><p>Network management while deploying wireless access points across two university campuses.</p></div>
+</div>
+</section>
 
-    <script>
-        const recipes = {
-            'butter-chicken': {
-                title: "Depinder's Butter Chicken",
-                chef: "Depinder Chhibber",
-                ingredients: [
-                    {
-                        name: "Charcoal Chicken",
-                        items: ["6 cloves garlic", "4cm piece ginger, peeled", "2 green chillies", "500g chicken thigh fillets, cubed", "⅓ cup Greek yoghurt", "½ lemon, juiced", "¼ cup cashews", "2 tbsp coriander seeds", "1 tbsp cumin seeds", "2 tsp whole black peppercorns", "1 tsp kasoori methi", "1 tsp chaat masala", "salt to taste"]
-                    },
-                    {
-                        name: "Green Chutney",
-                        items: ["1 bunch fresh coriander", "1 tsp cumin seeds", "2 tbsp yoghurt", "1 tsp sugar", "½ tsp salt", "½ lime, juiced", "½ tsp chaat masala"]
-                    },
-                    {
-                        name: "Sauce",
-                        items: ["½ red onion, sliced", "¼ cup melted ghee or butter", "½ cup thickened cream", "2 tbsp Greek yoghurt"]
-                    },
-                    {
-                        name: "Onion Salad",
-                        items: ["1 red onion, thinly sliced", "1 tbsp chopped coriander", "½ lemon, juiced", "½ tsp Kashmiri chilli powder", "½ tsp chaat masala"]
-                    },
-                    {
-                        name: "Roti",
-                        items: ["1 cup wholemeal flour", "1 cup plain flour", "1 tsp salt", "2 tbsp ghee", "ghee for cooking"]
-                    }
-                ],
-                steps: [
-                    "Prepare garlic-ginger-chilli paste in food processor. Mix 2 tbsp with chicken, salt and lemon juice. Marinate 10 minutes.",
-                    "Boil cashews in 1 cup water for 5-10 minutes. Cool, then grind into fine paste.",
-                    "Toast coriander seeds, cumin seeds and peppercorns until fragrant. Grind to powder.",
-                    "For second marination: add yoghurt, cashew paste, kasoori methi, chaat masala and 1-2 tbsp ground spices to chicken. Marinate 10-15 minutes.",
-                    "For Green Chutney: blend 3 tbsp garlic paste with coriander, mint, cumin seeds, yoghurt, sugar and salt. Add chaat masala and lime juice. Set 1 tbsp aside in bowl, rest in serving bowl.",
-                    "For Sauce: whisk ingredients with reserved green chutney. Adjust seasoning.",
-                    "For Onion Salad: mix all ingredients in serving bowl.",
-                    "For Roti: combine flours and salt. Add ghee and ⅔ cup water. Knead into soft dough. Rest 5 minutes under wet towel.",
-                    "Divide dough into 8 balls. Roll each to 18cm diameter rounds.",
-                    "Cook roti in dry frypan 3 minutes per side until golden. Brush with ghee.",
-                    "Thread marinated chicken onto skewers. Grill on hibachi, turning frequently and brushing with ghee.",
-                    "Toss cooked chicken in prepared sauce. Serve with roti, green chutney and onion salad."
-                ]
-            },
-            'carrot-halwa': {
-                title: "Carrot Halwa Parfait",
-                chef: "Navy Team - Back To Win",
-                ingredients: [
-                    {
-                        name: "Carrot Halwa Parfait",
-                        items: ["38g ghee", "560g carrots, grated", "45ml milk", "150g caster sugar", "¾ tsp cardamom powder", "45ml water", "3 egg yolks", "225g cream"]
-                    },
-                    {
-                        name: "Rough Puff Crumbs",
-                        items: ["125g plain flour", "½ tsp salt", "125g unsalted butter", "50ml chilled water", "2 tbsp icing sugar"]
-                    },
-                    {
-                        name: "Cardamom Cream",
-                        items: ["300ml thickened cream", "2 tsp ground cardamom", "25g caster sugar", "50g pistachios"]
-                    },
-                    {
-                        name: "Carrot Gel",
-                        items: ["400ml carrot juice", "50g sugar", "4g agar agar powder"]
-                    },
-                    {
-                        name: "Pickled Carrots",
-                        items: ["2 purple baby carrots, peeled", "100ml white vinegar", "2 tbsp caster sugar", "2 tsp salt"]
-                    },
-                    {
-                        name: "Garnish",
-                        items: ["1 tbsp ghee", "60g sultanas", "marigold flowers", "gold leaf"]
-                    }
-                ],
-                steps: [
-                    "Preheat oven to 190°C. Line 2 baking trays.",
-                    "Cook ghee and grated carrots 5 minutes. Add milk, 75g sugar and cardamom. Cook 30 minutes until mushy. Cool 10 minutes, blend until smooth, strain and refrigerate.",
-                    "Heat remaining sugar with water to 116°C. At 100°C, start whisking egg yolks in mixer until pale. Slowly pour hot sugar into yolks while whisking. Mix until combined.",
-                    "Whip cream to soft peaks in separate bowl. Fold in egg mixture, then carrot purée.",
-                    "Pour into 7cm silicone dome moulds. Freeze 4 hours.",
-                    "For Rough Puff: sift flour and salt. Rub in cubed cold butter loosely. Add 80-90ml cold water to form rough dough. Wrap and rest 20 minutes in fridge.",
-                    "Roll dough to 3 times width. Fold top third down, bottom third up. Turn and repeat 3 more times. Rest 30 minutes.",
-                    "Roll to 4mm thick. Cut into 9 squares. Dust with icing sugar. Bake 35-40 minutes until deep golden.",
-                    "Cool, break into crumble. Dust with sugar and bake 10 more minutes.",
-                    "For Cardamom Cream: grind pistachios to powder, sift 35g. Whip cream with cardamom and sugar to stiff peaks. Fold in pistachios, transfer to piping bag.",
-                    "For Carrot Gel: heat carrot juice and sugar until dissolved. Add agar agar, boil 1-2 minutes. Set in fridge 25 minutes. Blend to gel consistency, transfer to piping bag.",
-                    "For Pickled Carrots: slice into 2mm discs. Simmer vinegar, sugar and salt. Pour over carrots.",
-                    "For Sultanas: fry in ghee 1-2 minutes until caramelised.",
-                    "To serve: unmould parfait, soften 20 minutes. Top with pickled carrots and gold leaf. Arrange crumble around, pipe cream and gel dots. Add sultanas, garnish with marigold and carrot fronds."
-                ]
-            },
-            'prawn-takoyaki': {
-                title: "Indian Spiced Prawn Takoyaki",
-                chef: "Audra Morrice",
-                ingredients: [
-                    {
-                        name: "Batter",
-                        items: ["125g plain flour", "1 tsp salt", "¾ tsp sugar", "¾ tsp ground cumin", "¾ tsp cumin seeds, toasted", "¾ tsp ground coriander", "¾ tsp chilli powder", "½ tsp turmeric", "¼ tsp cardamom", "375ml water", "125ml coconut cream", "1 egg, beaten", "2-3 large green chillies, diced", "2 Thai chillies, diced", "1 red onion, diced", "3 curry leaf sprigs", "1 spring onion, diced", "10g young ginger, diced"]
-                    },
-                    {
-                        name: "Prawn Filling",
-                        items: ["4-5 large prawns, diced 7mm", "½ tsp chilli powder", "½ tsp turmeric", "pinch of salt & pepper", "1 tsp oil"]
-                    },
-                    {
-                        name: "Curry Leaf Topping",
-                        items: ["2 tbsp oil", "1 tsp mustard seeds", "2-4 curry leaf sprigs", "1-2 red chillies, sliced"]
-                    },
-                    {
-                        name: "Tamarind Sauce",
-                        items: ["110g jaggery, shaved", "70g water", "60g tamarind purée", "¼ tsp chilli powder", "¼ tsp cumin", "pinch of salt"]
-                    },
-                    {
-                        name: "Cucumber Raita",
-                        items: ["1 cup Greek yoghurt", "½ Lebanese cucumber, grated", "pinch of salt & sugar", "1 tsp topping"]
-                    }
-                ],
-                steps: [
-                    "For Batter: mix flour, salt, sugar and spices. Separately mix water, coconut cream and egg. Combine until smooth, strain. Dice remaining ingredients and add to batter. Transfer to jug.",
-                    "For Prawn Filling: combine all ingredients.",
-                    "For Topping: heat oil, add mustard seeds until popping. Add curry leaves and chillies, cook until crispy.",
-                    "For Tamarind Sauce: melt jaggery in water. Add tamarind, spices and salt. Simmer 10 minutes to jammy consistency. Cool in serving bowl.",
-                    "For Raita: grate cucumber in tea towel, squeeze dry. Mix with yoghurt, salt and sugar. Garnish with topping. Refrigerate.",
-                    "Preheat takoyaki pan over medium heat. Oil holes generously.",
-                    "Fill each hole with batter, allowing overflow. Add prawn piece to each.",
-                    "As batter cooks, separate each takoyaki with skewer. Cook 5 minutes until bottoms golden.",
-                    "Turn 90° with spatula or skewers. Add more batter to gaps. Cook 5 minutes, turn to expose golden bottom.",
-                    "Reduce heat. Continue cooking and turning until dark golden and cooked through, about 10 more minutes.",
-                    "Serve on turmeric leaf. Top with curry leaf topping. Serve with tamarind sauce and raita."
-                ]
-            },
-            'slosh-smash': {
-                title: "Slosh and Smash",
-                chef: "Sav Stankovic",
-                ingredients: [
-                    {
-                        name: "Patty Dough",
-                        items: ["250g plain flour", "½ tsp salt", "125g unsalted butter, cubed", "6-8 tbsp iced water", "1 tbsp lime juice"]
-                    },
-                    {
-                        name: "Patty Filling",
-                        items: ["2 potatoes, cubed 2cm", "1 tsp oil", "250g pork mince", "1 onion, diced", "2 garlic cloves, minced", "8-10 curry leaves", "1 tsp cumin", "1 tsp coriander", "½ tsp chilli powder", "1 tsp salt", "½ tsp pepper", "2 tbsp coconut milk"]
-                    },
-                    {
-                        name: "TnT Sauce",
-                        items: ["500g ripe tomatoes", "2 tbsp tamarind pulp", "2 tbsp brown sugar", "1 tsp salt"]
-                    },
-                    {
-                        name: "Green Sauce",
-                        items: ["3-4 green chillies", "1 cup mint leaves", "1 cup coriander", "3cm ginger", "½ cup coconut milk", "½ cup oil", "4 tbsp lime juice", "1 tsp salt", "1 tbsp sugar", "½ tsp pepper"]
-                    },
-                    {
-                        name: "Apple Cucumber Salsa",
-                        items: ["1 green apple, diced", "1 cucumber, peeled and diced", "1 red onion, diced", "2 tbsp lime juice", "½ tsp salt", "1 tsp sugar", "¼ tsp pepper"]
-                    },
-                    {
-                        name: "Spiced Yoghurt",
-                        items: ["1 cup Greek yoghurt", "½ tsp turmeric", "1 tsp cumin", "1 tsp coriander", "½ tsp paprika", "¼ tsp cayenne", "½ tsp salt"]
-                    }
-                ],
-                steps: [
-                    "For Dough: mix flour and salt. Rub in cold butter until crumbly. Add lime juice and iced water until dough forms. Wrap, refrigerate 30 minutes.",
-                    "For Filling: boil potatoes 15 minutes. Sauté onion 5 minutes, add garlic and curry leaves for 2-3 minutes.",
-                    "Brown pork mince 10-15 minutes. Add spices, salt and pepper. Mash potatoes and add to mince with coconut milk. Cook 2-3 minutes. Cool completely.",
-                    "For TnT Sauce: char whole tomatoes over flame until blistered. Chop roughly. Cook with tamarind, sugar and salt 10-15 minutes. Blend smooth. Transfer to squeeze bottle.",
-                    "For Green Sauce: char chillies until blistered. Blend all ingredients until smooth. Adjust seasoning. Transfer to squeeze bottle.",
-                    "For Salsa: combine all ingredients. Refrigerate.",
-                    "For Yoghurt: toast turmeric, cumin and coriander 1 minute. Mix with yogurt, paprika, cayenne and salt. Refrigerate.",
-                    "Roll dough to 2-3mm. Cut 9-10cm circles. Place 1 tbsp filling in center. Fold in half, seal with water and crimp. Refrigerate 20 minutes.",
-                    "Deep fry patties 3 minutes per side until golden. Drain on paper towel.",
-                    "To serve: smash patties gently. Spread yogurt on plate, add patties. Drizzle both sauces. Top with salsa and coriander. Serve immediately."
-                ]
-            },
-            'banana-fish': {
-                title: "Banana Leaf Fish Fry",
-                chef: "Depinder Chhibber",
-                ingredients: [
-                    {
-                        name: "Rice",
-                        items: ["½ cup basmati rice, washed", "1 tsp ghee", "½ tsp cumin seeds"]
-                    },
-                    {
-                        name: "Coconut Chutney",
-                        items: ["1 cup fresh shredded coconut", "1 curry leaf sprig", "1 cup coriander", "1 green chilli", "3cm ginger", "3 garlic cloves", "½ tsp cumin seeds", "2 tbsp Greek yoghurt", "½ lime, juiced", "salt to taste"]
-                    },
-                    {
-                        name: "Temper",
-                        items: ["1 tbsp coconut oil", "½ tsp mustard seeds", "½ tsp cumin seeds", "2 curry leaf sprigs", "1 dried red chilli"]
-                    },
-                    {
-                        name: "Banana Leaf Fish",
-                        items: ["300g white fish fillet, skin on", "½ tsp turmeric
+<section id="services">
+<h2>Services</h2><p class="sub">What I can help with</p>
+<div class="grid">
+<div class="card"><h3>Web Application Testing</h3><p>Reconnaissance, fuzzing and vulnerability assessment, with clear security reporting.</p></div>
+<div class="card"><h3>Phishing Simulation</h3><p>Planning and running simulated campaigns that show where awareness needs work.</p></div>
+<div class="card"><h3>Network Infrastructure</h3><p>Installing and replacing wireless access points and supporting campus networks.</p></div>
+<div class="card"><h3>Technical Support</h3><p>Troubleshooting SaaS systems for hundreds of users, together with developers and architects.</p></div>
+</div>
+</section>
+
+<section id="skills">
+<h2>Skills</h2><p class="sub">Languages, tools and strengths</p>
+<p class="group">Programming &amp; web</p><div class="chips"><span>Python</span><span>SQL</span><span>Java</span><span>PHP</span><span>HTML</span><span>CSS</span></div>
+<p class="group">Security tools</p><div class="chips"><span>ffuf</span><span>GoPhish</span><span>Wireshark</span><span>Vulnerability assessment</span><span>Security reporting</span></div>
+<p class="group">Infrastructure &amp; support</p><div class="chips"><span>Cisco Catalyst Center</span><span>Wireless networks</span><span>Technical support</span><span>Microsoft Office</span><span>Excel</span></div>
+<p class="group">Languages</p><div class="chips"><span>Swedish (native)</span><span>English (bilingual)</span><span>Mandarin (native)</span><span>French (elementary)</span></div>
+</section>
+
+<section id="experience">
+<h2>Experience</h2><p class="sub">Work, education and volunteering</p>
+<h4>Work experience</h4>
+<div class="item"><span class="yr">2026 – Present</span><h3>Technical Support Specialist (Part-time)</h3><div class="org">ForestX · Växjö</div><ul><li>Support for the CFHarvest and CFForest SaaS systems, handling errands from around 300 users.</li><li>Troubleshooting with forestry experts, solution architects and developers.</li></ul></div>
+<div class="item"><span class="yr">2026</span><h3>Network Infrastructure Technician (Part-time)</h3><div class="org">Linnaeus University · Växjö</div><ul><li>Installed and replaced wireless access points across the Växjö and Kalmar campuses.</li><li>Worked with Cisco Catalyst Center and Excel in the university’s network environment.</li></ul></div>
+<div class="item"><span class="yr">2025</span><h3>Information Security Intern</h3><div class="org">Sedermera Corporate Finance · Malmö</div><ul><li>Web application reconnaissance and vulnerability discovery with ffuf.</li><li>Simulated phishing campaigns with GoPhish to improve employee resilience.</li></ul></div>
+<div class="item"><span class="yr">2022</span><h3>Correctional Officer</h3><div class="org">Tygelsjö Correctional Facility · Malmö</div><ul><li>Worked in a high-focus environment, maintained safety and carried out preventative security measures.</li></ul></div>
+<div class="item"><span class="yr">2020 – 2021</span><h3>Health Administrator</h3><div class="org">Skåne University Hospital, COVID-19 Unit · Lund</div><ul><li>Managed scheduling, patient care and patient data using Melior and PASiS.</li></ul></div>
+<h4>Education</h4>
+<div class="item"><span class="yr">2024 – 2027</span><h3>BSc in Computer Science, Cyber Security</h3><div class="org">Linnaeus University · 180 HP</div><ul><li>Ethical hacking, cryptography, network and cloud security, digital forensics, systems administration.</li></ul></div>
+<div class="item"><span class="yr">2020 – 2021</span><h3>Separate courses</h3><div class="org">Lund University · 45 hp</div></div>
+<div class="item"><span class="yr">2016 – 2019</span><h3>Diploma in Natural Sciences</h3><div class="org">High School Spyken</div></div>
+<h4>Volunteering</h4>
+<div class="item"><span class="yr">2022 – 2024</span><h3>Board Member</h3><div class="org">BRF Plantagelyckan 5 · Lund</div><ul><li>Responsible for entry systems, website administration (PHP and HTML) and finances.</li></ul></div>
+</section>
+
+<section class="contact" id="contact">
+<h2>Contact</h2><p class="sub">Let’s talk about security, IT or your next project</p>
+<a class="btn" href="mailto:ryan.shiding@gmail.com">ryan.shiding@gmail.com</a><a class="btn o" href="https://www.linkedin.com/in/ryan-shi-ding/" target="_blank" rel="noopener">LinkedIn</a>
+</section>
+<footer>© 2026 Ryan Shi Ding. All rights reserved.</footer>
+<script src="script.js"></script>
+</body>
+</html>
