@@ -162,6 +162,13 @@
     input.addEventListener("click", updateSuggestion);
     input.addEventListener("keyup", updateSuggestion);
     input.addEventListener("keydown", function (event) {
+      if (event.key === " " && input.selectionStart === input.selectionEnd &&
+          input.value.charAt(input.selectionStart - 1) === " ") {
+        event.preventDefault();
+        input.setRangeText(" ", input.selectionStart, input.selectionEnd, "end");
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        return;
+      }
       if (event.key === "ArrowUp") {
         if (!commandHistory.length) return;
         event.preventDefault();
