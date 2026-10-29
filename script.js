@@ -57,11 +57,13 @@
       });
     }, { threshold: 0.2 });
 
-    document.querySelectorAll("h1, h2, h3, h4").forEach(function (heading) {
-      if (heading.children.length || !heading.textContent.trim()) return;
-      heading.dataset.scrambleText = heading.textContent;
-      heading.textContent = scramble(heading.dataset.scrambleText, 0);
-      headingObserver.observe(heading);
+    document.querySelectorAll(
+      "main h1, main h2, main h3, main h4, main section:not(.terminal) p, main section:not(.terminal) a, main section:not(.terminal) li, main section:not(.terminal) span, main nav a, main footer"
+    ).forEach(function (element) {
+      if (element.children.length || !element.textContent.trim()) return;
+      element.dataset.scrambleText = element.textContent;
+      element.textContent = scramble(element.dataset.scrambleText, 0);
+      headingObserver.observe(element);
     });
   }
 
