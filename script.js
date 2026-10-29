@@ -70,6 +70,48 @@
   if (form && input && output) {
     var suggestion = document.getElementById("terminal-suggestion");
     var commandNames = ["whois", "grep", "curl", "clear", "help", "man"];
+    var pageKeywords;
+    var commandHistory = [];
+    var historyIndex = 0;
+    var historyDraft = "";
+
+    function forEachSearchableText(callback) {
+      var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+        acceptNode: function (textNode) {
+          var parent = textNode.parentElement;
+          if (!parent || !textNode.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          if (parent.closest(".terminal, script, style, noscript, template, [hidden], [aria-hidden='true']")) {
+            return NodeFilter.FILTER_REJECT;
+          }
+          var style = window.getComputedStyle(parent);
+          return style.display === "none" || style.visibility === "hidden" || !parent.getClientRects().length
+            ? NodeFilter.FILTER_REJECT
+            : NodeFilter.FILTER_ACCEPT;
+        }
+      });
+      var textNode;
+      while ((textNode = walker.nextNode())) {
+        var parent = textNode.parentElement;
+        callback(parent.dataset.scrambleText || textNode.nodeValue, parent);
+      }
+    }
+
+    function keywordsOnPage() {
+      if (pageKeywords) return pageKeywords;
+      var seen = Object.create(null);
+      pageKeywords = [];
+      forEachSearchableText(function (text) {
+        var words = text.match(/[A-Za-z0-9À-ÿ]+(?:['’-][A-Za-z0-9À-ÿ]+)*/g) || [];
+        words.forEach(function (word) {
+          var key = word.toLowerCase();
+          if (!seen[key]) {
+            seen[key] = true;
+            pageKeywords.push(word);
+          }
+        });
+      });
+      return pageKeywords;
+    }
 
     function completionFor(value) {
       var trailingSpace = /\s$/.test(value);
@@ -83,8 +125,13 @@
         candidates = commandNames;
       } else if (command === "whois" && previous.length === 1 && previous[1] !== "--help") {
         candidates = ["ryan", "ryanshiding", "--help"];
-      } else if (command === "grep" && previous.length === 1) {
-        candidates = ["--help"];
+      } else if (command === "grep") {
+        var grepArgs = previous.slice(1);
+        if (!grepArgs.length) {
+          candidates = current ? keywordsOnPage().concat(["-i", "--help"]) : ["-i", "--help"];
+        } else if (current && grepArgs[0] !== "--help") {
+          candidates = keywordsOnPage();
+        }
       } else if (command === "curl" && previous.length === 1) {
         candidates = ["-O", "--help"];
       } else if (command === "curl" && previous.length === 2 && previous[1] === "-O") {
@@ -115,6 +162,22 @@
     input.addEventListener("click", updateSuggestion);
     input.addEventListener("keyup", updateSuggestion);
     input.addEventListener("keydown", function (event) {
+      if (event.key === "ArrowUp") {
+        if (!commandHistory.length) return;
+        event.preventDefault();
+        if (historyIndex === commandHistory.length) historyDraft = input.value;
+        historyIndex = Math.max(0, historyIndex - 1);
+        input.value = commandHistory[historyIndex];
+        updateSuggestion();
+        return;
+      }
+      if (event.key === "ArrowDown" && historyIndex < commandHistory.length) {
+        event.preventDefault();
+        historyIndex += 1;
+        input.value = historyIndex === commandHistory.length ? historyDraft : commandHistory[historyIndex];
+        updateSuggestion();
+        return;
+      }
       if (event.key !== "Tab") return;
       var completion = completionFor(input.value);
       if (!completion) return;
@@ -135,9 +198,10 @@
       var argument = args.join(" ");
       var result = document.createElement("p");
       result.className = "terminal-result";
+      var grepTarget = null;
       var manuals = {
         whois: "whois - look up Ryan's profile\nUsage: whois <domain>\nUse 'whois ryan' or 'whois ryanshiding' to display Ryan Shi Ding's profile. Other names return a lookup error.",
-        grep: "grep - search this portfolio for text\nUsage: grep [ -i ] <search term>\nSearches visible portfolio headings, descriptions, skills, experience, and contact text. Matching is case-insensitive; -i is accepted for familiar grep syntax.",
+        grep: "grep - search this portfolio for text\nUsage: grep [ -i ] <search term>\nSearches visible page text and jumps to the first match. Matching is case-insensitive; -i is accepted for familiar grep syntax. Press Tab after a partial keyword to complete it from page text.",
         curl: "curl - download the CV\nUsage: curl -O <filename>\nUse 'curl -O " + cvPath + "' or 'curl -O cv.pdf' to download the CV PDF bundled with this website.",
         clear: "clear - clear the terminal output\nUsage: clear\nRemoves previous command output from this page's terminal. It does not change website content.",
         help: "help - list available website terminal commands\nUsage: help\nPrints a short command list. Use '<command> --help' for a command-specific manual.",
@@ -145,6 +209,10 @@
       };
 
       if (!name) return;
+
+      commandHistory.push(command);
+      historyIndex = commandHistory.length;
+      historyDraft = "";
 
       if (args.length === 1 && args[0] === "--help" && manuals[name]) {
         result.textContent = manuals[name];
@@ -173,16 +241,26 @@
             return arg.charAt(0) === "-" && arg !== "-i";
           })[0].charAt(1) + "'\nTry 'grep --help' for more information.";
         } else {
-          var matches = [];
-          document.querySelectorAll(
-            "main h1, main h2, main h3, main h4, main section:not(.terminal) p, main li, main .chips span, main footer"
-          ).forEach(function (element) {
-            var text = element.textContent.trim();
-            if (text && text.toLowerCase().indexOf(pattern.toLowerCase()) !== -1) {
-              matches.push(text);
+          try {
+            var matches = [];
+            forEachSearchableText(function (text, parent) {
+              if (text.toLowerCase().indexOf(pattern.toLowerCase()) !== -1) {
+                matches.push({ text: text.trim(), target: parent });
+              }
+            });
+
+            if (matches.length) {
+              grepTarget = matches[0].target;
+              result.textContent = "grep: found '" + pattern + "' in " + matches.length +
+                " place(s); jumping to first match:\n" + matches[0].text;
+            } else {
+              result.textContent = "grep: pattern not found: '" + pattern + "'";
             }
-          });
-          result.textContent = matches.length ? matches.join("\n") : "";
+          } catch (error) {
+            result.textContent = "grep: search failed: " +
+              (error && error.message ? error.message : "unexpected error") +
+              "\nTry 'grep --help' for more information.";
+          }
         }
       } else if (name === "curl") {
         var target = args[args.length - 1] || "";
@@ -236,7 +314,15 @@
       output.append(entry, result);
       input.value = "";
       updateSuggestion();
-      input.focus();
+      input.focus(grepTarget ? { preventScroll: true } : undefined);
+      if (grepTarget) {
+        try {
+          grepTarget.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+        } catch (error) {
+          result.textContent = "grep: could not navigate to match: " +
+            (error && error.message ? error.message : "unexpected error");
+        }
+      }
     });
   }
 
