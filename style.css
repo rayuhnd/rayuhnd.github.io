@@ -207,9 +207,16 @@ section[id] .sub::before {
   margin: 8px 18px 0 0;
 }
 
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
 .grid::before,
 .grid::after {
   display: block;
+  grid-column: 1 / -1;
 }
 
 .grid::before {
