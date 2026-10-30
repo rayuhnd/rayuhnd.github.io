@@ -67,6 +67,17 @@
     });
   }
 
+  var downloadCvButton = document.getElementById("download-cv-button");
+
+  if (downloadCvButton && form && input) {
+    downloadCvButton.addEventListener("click", function () {
+      input.value = "curl -O " + cvPath;
+      updateSuggestion();
+      input.focus();
+      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    });
+  }
+
   if (form && input && output) {
     var suggestion = document.getElementById("terminal-suggestion");
     var commandNames = ["whois", "grep", "curl", "clear", "help", "man"];

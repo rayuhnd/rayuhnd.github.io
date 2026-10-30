@@ -104,11 +104,38 @@ nav {
   padding-bottom: 12px;
 }
 
+.nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
 .links {
   display: flex;
   justify-content: flex-start;
   gap: 18px;
   flex-wrap: wrap;
+}
+
+.cv-button {
+  margin-left: auto;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.cv-button:hover,
+.cv-button:focus-visible {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.9);
+  outline: none;
 }
 
 a {
