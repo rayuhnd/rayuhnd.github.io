@@ -58,7 +58,7 @@
     }, { threshold: 0.2 });
 
     document.querySelectorAll(
-      "main h1, main h2, main h3, main h4, main section:not(.terminal) p, main section:not(.terminal) a, main section:not(.terminal) li, main section:not(.terminal) span, main nav a, main footer"
+      "main h1, main h2, main h3, main h4, main section:not(.terminal) p, main section:not(.terminal) a, main section:not(.terminal) li, main section:not(.terminal) span, main nav a, main nav button, main footer"
     ).forEach(function (element) {
       if (element.children.length || !element.textContent.trim()) return;
       element.dataset.scrambleText = element.textContent;
