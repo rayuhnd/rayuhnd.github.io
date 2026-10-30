@@ -68,15 +68,7 @@
   }
 
   var downloadCvButton = document.getElementById("download-cv-button");
-
-  if (downloadCvButton && form && input) {
-    downloadCvButton.addEventListener("click", function () {
-      input.value = "curl -O " + cvPath;
-      updateSuggestion();
-      input.focus();
-      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
-    });
-  }
+  var cvCommandInProgress = false;
 
   if (form && input && output) {
     var suggestion = document.getElementById("terminal-suggestion");
@@ -207,6 +199,7 @@
 
     form.addEventListener("submit", function (event) {
       event.preventDefault();
+      if (cvCommandInProgress) return;
       var command = input.value.trim();
       var parts = command.match(/"[^"]*"|'[^']*'|\S+/g) || [];
       var name = (parts.shift() || "").toLowerCase();
@@ -342,6 +335,39 @@
         }
       }
     });
+
+    if (downloadCvButton) {
+      downloadCvButton.addEventListener("click", function () {
+        if (cvCommandInProgress) return;
+        var command = "curl -O " + cvPath;
+        var index = 0;
+        cvCommandInProgress = true;
+        downloadCvButton.disabled = true;
+        downloadCvButton.setAttribute("aria-busy", "true");
+        input.value = "";
+        input.readOnly = true;
+        input.focus();
+
+        function typeNextCharacter() {
+          input.value += command.charAt(index);
+          input.dispatchEvent(new Event("input", { bubbles: true }));
+          index += 1;
+
+          if (index < command.length) {
+            window.setTimeout(typeNextCharacter, reduceMotion ? 0 : 90);
+            return;
+          }
+
+          input.readOnly = false;
+          cvCommandInProgress = false;
+          form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+          downloadCvButton.disabled = false;
+          downloadCvButton.removeAttribute("aria-busy");
+        }
+
+        typeNextCharacter();
+      });
+    }
   }
 
   document.querySelectorAll("[data-go]").forEach(function (link) {
